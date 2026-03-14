@@ -2,7 +2,7 @@
 
 A curated collection of ready-to-run code samples showing how to build real-world applications with [DocumentDB](https://github.com/documentdb/documentdb) — an open-source, MongoDB-compatible document database built on PostgreSQL.
 
-Browse the gallery at **[documentdb.github.io/samples](https://documentdb.github.io/samples)**.
+Browse the gallery at **[documentdb.io/samples](https://documentdb.io/samples)**.
 
 ---
 
