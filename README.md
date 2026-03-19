@@ -95,6 +95,15 @@ samples:
 
 ### 3. Open a pull request
 
+Fork the repo on GitHub, then clone your fork:
+
+```bash
+git clone https://github.com/<your-username>/documentdb-samples-gallery.git
+cd documentdb-samples-gallery
+```
+
+Create a branch, commit your sample, and push to your fork:
+
 ```bash
 git checkout -b feat/add-my-sample
 git add my-sample-name/ registry.yml
@@ -102,7 +111,7 @@ git commit -m "feat: add my-sample-name"
 git push origin feat/add-my-sample
 ```
 
-Open a PR against `main`. Once merged, the gallery website rebuilds automatically.
+Then open a pull request from your fork against the `main` branch of this repo. Once merged, the gallery website rebuilds automatically.
 
 ---
 
