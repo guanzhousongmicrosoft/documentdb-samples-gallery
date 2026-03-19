@@ -206,7 +206,7 @@ Using a MongoDB client:
 
 ```bash
 mongosh --host localhost --port 10260 --tls --tlsAllowInvalidCertificates \
-  -u docdb_user -p Admin100
+  -u docdbuser -p Admin100!
 ```
 
 Using the PostgreSQL shell:
