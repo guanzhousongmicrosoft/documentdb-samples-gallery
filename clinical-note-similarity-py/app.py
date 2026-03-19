@@ -80,7 +80,8 @@ def search():
         try:
             results = similarity_search(query, specialty, num_results)
         except Exception as e:
-            error = str(e)
+            app.logger.exception("Error during similarity search")
+            error = "An unexpected error occurred while processing your request. Please try again later."
 
     return render_template(
         "index.html",
