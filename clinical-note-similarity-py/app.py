@@ -22,6 +22,15 @@ def get_col():
     return _col
 
 
+@app.teardown_appcontext
+def close_mongo_client(exception):
+    global _client, _col
+    if _client is not None:
+        _client.close()
+        _client = None
+        _col = None
+
+
 def similarity_search(query: str, specialty: str, num_results: int) -> list:
     col = get_col()
     k = num_results if specialty == "all" else num_results * 4
