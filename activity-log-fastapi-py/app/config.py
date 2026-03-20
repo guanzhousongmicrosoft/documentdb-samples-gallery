@@ -1,5 +1,3 @@
-import sys
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,8 +10,8 @@ class Settings(BaseSettings):
 
     def validated_uri(self) -> str:
         if not self.documentdb_uri:
-            sys.exit(
-                "Error: DOCUMENTDB_URI environment variable is not set.\n"
+            raise ValueError(
+                "Configuration error: DOCUMENTDB_URI environment variable is not set. "
                 "Copy .env.example to .env and fill in your connection string."
             )
         return self.documentdb_uri
