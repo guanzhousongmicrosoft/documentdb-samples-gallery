@@ -156,7 +156,11 @@ The server auto-detects Ollama on startup. Without it, text/tag/regex search sti
 
 ## Setup
 
-### 1. Start DocumentDB
+You can run this sample with **local DocumentDB** (Docker) or **Azure Cosmos DB for MongoDB vCore** (cloud).
+
+### Option A: Local DocumentDB (Docker)
+
+#### 1. Start DocumentDB
 
 From this sample's directory:
 
@@ -171,14 +175,14 @@ docker compose ps
 # documentdb should show "healthy"
 ```
 
-### 2. Install dependencies
+#### 2. Install dependencies
 
 ```bash
 cd mcp-server
 npm install
 ```
 
-### 3. Configure environment
+#### 3. Configure environment
 
 ```bash
 cp .env.example .env
@@ -186,14 +190,65 @@ cp .env.example .env
 
 The defaults work out of the box with the Docker Compose setup.
 
-### 4. Build and start the server
+#### 4. Build and start the server
 
 ```bash
 npm run build
 npm start
 ```
 
-### 5. Verify it's running
+### Option B: Azure Cosmos DB for MongoDB (vCore)
+
+Deploy to Azure with a single script — uses the **free tier** (lifetime free, 32 GB, no credit card charges):
+
+#### 1. Prerequisites
+
+- [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) installed
+- Logged in: `az login`
+
+#### 2. Deploy
+
+```bash
+bash scripts/deploy-azure.sh
+```
+
+This creates:
+- A resource group (`personal-memory-rg`)
+- A Cosmos DB for MongoDB vCore cluster (free tier)
+- A firewall rule for your current IP
+
+The script outputs a `DOCUMENTDB_URI` — copy it to your `.env` file.
+
+You can customize the deployment:
+
+```bash
+bash scripts/deploy-azure.sh \
+  --cluster-name my-memory \
+  --resource-group my-rg \
+  --location westus \
+  --tier Free
+```
+
+#### 3. Install, configure, and start
+
+```bash
+cd mcp-server
+npm install
+cp .env.example .env
+# Edit .env — paste the DOCUMENTDB_URI from the deploy script output
+npm run build
+npm start
+```
+
+#### Tear down Azure resources
+
+```bash
+az group delete --name personal-memory-rg --yes --no-wait
+```
+
+### After Setup (Both Options)
+
+#### Verify it's running
 
 ```bash
 # Health check (includes DocumentDB connectivity)
@@ -201,7 +256,7 @@ curl http://localhost:3000/health
 # → {"status":"ok","service":"personal-memory-mcp","db":"connected"}
 ```
 
-### 6. Seed example memories (optional)
+#### Seed example memories (optional)
 
 ```bash
 source .env
@@ -215,6 +270,7 @@ bash ../scripts/seed-memories.sh
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `DOCUMENTDB_URI` | DocumentDB connection string | `mongodb://admin:documentdb@localhost:10260/...` |
+| `DB_NAME` | Database name | `personal_memory` |
 | `MCP_SERVER_PORT` | Server port | `3000` |
 | `AUTH_TOKEN` | Bearer token for authentication | `dev-token-change-me` |
 | `NO_AUTH` | Disable auth for development | `false` |
@@ -323,6 +379,7 @@ personal-memory-mcp-ts/
 │       ├── unit.test.ts        # Decay scoring + similarity tests
 │       └── integration.test.ts # DocumentDB CRUD tests
 ├── scripts/
+│   ├── deploy-azure.sh         # One-command Azure deployment
 │   └── seed-memories.sh        # Seed example memories via MCP API
 └── data/
     └── sample-memories.json    # Example memory data

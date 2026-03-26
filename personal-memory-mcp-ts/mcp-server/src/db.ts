@@ -7,6 +7,7 @@ let client: MongoClient | null = null;
 let db: Db | null = null;
 
 const DOCUMENTDB_URI = process.env.DOCUMENTDB_URI || "";
+const DB_NAME = process.env.DB_NAME || "personal_memory";
 
 const MAX_RETRIES = 5;
 const INITIAL_DELAY_MS = 1000;
@@ -25,7 +26,7 @@ export async function connectDb(): Promise<Db> {
     try {
       client = new MongoClient(DOCUMENTDB_URI);
       await client.connect();
-      db = client.db("personal_memory");
+      db = client.db(DB_NAME);
       await ensureIndexes(db);
       logger.info("Connected to DocumentDB");
 
